@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>학습코칭단 신청</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  [hidden] { display: none !important; }
+  :root {
+    --bg: #f4f6f9;
+    --card: #ffffff;
+    --text: #1d2433;
+    --muted: #667085;
+    --line: #dde2ea;
+    --primary: #1f5fbf;
+    --primary-weak: #e8f0fc;
+    --danger: #c62f2f;
+    --ok: #1f8a4c;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: Pretendard, -apple-system, "Malgun Gothic", sans-serif;
+    font-size: 16px; line-height: 1.5; -webkit-text-size-adjust: 100%;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
+  header { margin-bottom: 20px; }
+  header .org { color: var(--primary); font-weight: 600; font-size: 14px; }
+  header h1 { margin: 4px 0 8px; font-size: 26px; letter-spacing: -0.02em; }
+  header p { margin: 0; color: var(--muted); font-size: 15px; }
+  .demo-banner {
+    background: #fff4d6; border: 1px solid #f0d58a; color: #6b5200;
+    padding: 10px 14px; border-radius: 10px; font-size: 14px; margin-bottom: 16px;
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 22px 20px; margin-bottom: 16px;
+  }
+  .card h2 { margin: 0 0 16px; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+  .card h2 .num {
+    display: inline-flex; width: 24px; height: 24px; border-radius: 50%;
+    background: var(--primary); color: #fff; font-size: 13px; align-items: center; justify-content: center;
+  }
+  .field { margin-bottom: 16px; }
+  .field:last-child { margin-bottom: 0; }
+  label.lbl { display: block; font-weight: 600; font-size: 15px; margin-bottom: 6px; }
+  .req { color: var(--danger); margin-left: 2px; }
+  .hint { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .err { color: var(--danger); font-size: 13px; margin-top: 4px; display: none; }
+  .field.invalid .err { display: block; }
+  .field.invalid input, .field.invalid select, .field.invalid .dropzone { border-color: var(--danger); }
+  input[type=text], input[type=tel], input[type=email], select {
+    width: 100%; height: 48px; padding: 0 14px; font: inherit; color: var(--text);
+    border: 1px solid var(--line); border-radius: 10px; background: #fff; outline: none;
+  }
+  input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-weak); }
+  input[readonly] { background: #f7f8fa; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
+  .seg label {
+    height: 48px; display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--line); border-radius: 10px; cursor: pointer; font-weight: 500;
+  }
+  .seg input:checked + label { border-color: var(--primary); background: var(--primary-weak); color: var(--primary); font-weight: 700; }
+  .seg input:focus-visible + label { box-shadow: 0 0 0 3px var(--primary-weak); }
+  .addr-search { display: flex; gap: 8px; margin-bottom: 8px; }
+  .addr-search input { flex: 1; cursor: pointer; }
+  .btn {
+    height: 48px; padding: 0 18px; border-radius: 10px; border: 1px solid var(--primary);
+    background: #fff; color: var(--primary); font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap;
+  }
+  .btn.primary { background: var(--primary); color: #fff; }
+  .btn:disabled { opacity: .55; cursor: not-allowed; }
+  .rank-list { display: grid; gap: 8px; }
+  .rank-row { display: grid; grid-template-columns: 72px 1fr; align-items: center; gap: 10px; }
+  .rank-row span { font-weight: 700; color: var(--primary); }
+  .rsel { position: relative; }
+  .rsel-btn {
+    width: 100%; height: 48px; padding: 0 40px 0 14px; text-align: left; font: inherit; color: var(--text);
+    border: 1px solid var(--line); border-radius: 10px; background: #fff; cursor: pointer;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .rsel-btn::after { content: ''; position: absolute; right: 16px; top: 20px; width: 8px; height: 8px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); }
+  .rsel-btn.empty { color: var(--muted); }
+  .rsel-btn[aria-expanded=true] { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-weak); }
+  .rsel-list {
+    position: absolute; left: 0; right: 0; top: 52px; z-index: 10; list-style: none; margin: 0; padding: 6px;
+    background: #fff; border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 8px 24px rgba(16,24,40,.14);
+  }
+  .rsel-list button {
+    width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    padding: 11px 10px; border: 0; border-radius: 8px; background: none; font: inherit; color: var(--text); text-align: left; cursor: pointer;
+  }
+  .rsel-list button:hover:not(:disabled) { background: var(--primary-weak); }
+  .rsel-list button.cur { color: var(--primary); font-weight: 700; }
+  .rsel-list button:disabled { color: #b4bac4; cursor: not-allowed; }
+  .rsel-list em { font-style: normal; font-size: 12px; padding: 2px 8px; border-radius: 99px; background: #eef0f3; color: #8a919c; white-space: nowrap; }
+  .rank-note { margin-top: 10px; display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; }
+  .rank-note .hint { margin: 0; }
+  .btn.sm { height: 34px; padding: 0 12px; font-size: 14px; font-weight: 500; }
+  .check-row { display: flex; align-items: center; gap: 10px; margin-top: 16px; padding: 14px; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; font-weight: 600; }
+  .check-row input { width: 20px; height: 20px; accent-color: var(--primary); margin: 0; flex-shrink: 0; }
+  .check-row:has(input:checked) { border-color: var(--primary); background: var(--primary-weak); }
+  .hint.notice { color: var(--primary); font-weight: 500; }
+  .dropzone {
+    border: 2px dashed var(--line); border-radius: var(--radius); padding: 22px 16px; text-align: center;
+    cursor: pointer; transition: background .15s, border-color .15s;
+  }
+  .dropzone.drag { border-color: var(--primary); background: var(--primary-weak); }
+  .dropzone strong { color: var(--primary); }
+  .dropzone .hint { margin-top: 6px; }
+  .files { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 6px; }
+  .files li {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    border: 1px solid var(--line); border-radius: 10px; font-size: 14px;
+  }
+  .files .fname { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .files .fsize { color: var(--muted); font-size: 13px; }
+  .files button { border: 0; background: none; color: var(--muted); font-size: 20px; cursor: pointer; line-height: 1; padding: 0 4px; }
+  .submit-area { margin-top: 8px; }
+  .submit-area .btn { width: 100%; height: 56px; font-size: 17px; }
+  .hp { position: absolute; left: -9999px; }
+
+  .modal { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; z-index: 50; align-items: center; justify-content: center; padding: 16px; }
+  .modal.open { display: flex; }
+  .modal-box { background: #fff; width: 100%; max-width: 500px; height: min(560px, 85vh); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
+  .modal-head { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--line); font-weight: 700; }
+  .modal-head button { border: 0; background: none; font-size: 24px; cursor: pointer; color: var(--muted); }
+  #postcodeWrap { flex: 1; }
+
+  .progress-box { text-align: center; padding: 8px 0; }
+  .progress-box p { margin: 0 0 14px; font-weight: 600; }
+  .bar { height: 10px; border-radius: 99px; background: var(--line); overflow: hidden; }
+  .bar div { height: 100%; width: 0; background: var(--primary); transition: width .3s; }
+  .progress-box .hint { margin-top: 10px; }
+
+  .done { text-align: center; padding: 36px 20px; }
+  .done .check { width: 64px; height: 64px; border-radius: 50%; background: #e3f5ea; color: var(--ok); font-size: 34px; display: inline-flex; align-items: center; justify-content: center; }
+  .done h2 { display: block; margin: 16px 0 8px; font-size: 22px; }
+  .done p { color: var(--muted); margin: 4px 0; }
+  .summary { text-align: left; margin: 20px auto 0; max-width: 420px; border-top: 1px solid var(--line); padding-top: 14px; font-size: 14px; }
+  .summary div { display: flex; gap: 12px; padding: 3px 0; }
+  .summary dt { width: 92px; color: var(--muted); flex-shrink: 0; }
+  .summary dd { margin: 0; }
+
+  .topnav { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+  .linkbtn { border: 0; background: none; color: var(--primary); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; padding: 6px 0; text-decoration: underline; text-underline-offset: 3px; }
+  .notice-bar {
+    display: flex; gap: 10px; align-items: center; justify-content: space-between;
+    padding: 12px 14px; border-radius: 10px; font-size: 14px; margin-bottom: 16px;
+    background: var(--primary-weak); border: 1px solid #c9daf5; color: #1d3f78;
+  }
+  .notice-bar.warn { background: #fff4d6; border-color: #f0d58a; color: #6b5200; }
+  .notice-bar .btn { flex-shrink: 0; }
+  .file-actions { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .file-actions.has-camera { grid-template-columns: 1fr auto; }
+  .file-actions .btn { height: auto; min-height: 48px; }
+  .files li .fstate { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .files li.ok .fstate { color: var(--ok); font-weight: 600; }
+  .files li .fbar { height: 4px; border-radius: 99px; background: var(--line); overflow: hidden; margin-top: 6px; }
+  .files li .fbar div { height: 100%; width: 0; background: var(--primary); transition: width .2s; }
+  .files li .fmain { flex: 1; min-width: 0; }
+  .progress-actions { display: grid; gap: 8px; margin-top: 16px; }
+  .progress-actions .btn { width: 100%; }
+  .pct { font-size: 32px; font-weight: 800; color: var(--primary); margin: 4px 0 10px; }
+  #upList { text-align: left; margin-top: 16px; }
+  .lookup-result { margin-top: 16px; padding: 16px; border-radius: 10px; background: #f7f8fa; }
+  .lookup-result.ok { background: #e3f5ea; }
+  .lookup-result b { font-size: 18px; }
+
+  @media (max-width: 480px) {
+    header h1 { font-size: 22px; }
+    .card { padding: 18px 16px; }
+    .row { grid-template-columns: 1fr; gap: 0; }
+    .row .field { margin-bottom: 16px; }
+    .notice-bar { flex-direction: column; align-items: stretch; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav"><button type="button" class="linkbtn" id="toLookup">이미 신청하셨나요? 접수 확인</button></div>
+  <header>
+    <div class="org">대구광역시교육청</div>
+    <h1>2027 두뇌기반 학습코칭단 신청</h1>
+    <p>기본정보를 입력하고 신청서류를 첨부한 뒤 제출해 주세요. 별표(<span class="req">*</span>) 항목은 모두 필수입니다.</p>
+  </header>
+
+  <div class="notice-bar warn" id="demoBanner" hidden>시제품 모드입니다. 제출해도 실제로 저장되지 않습니다.</div>
+  <div class="notice-bar warn" id="kakaoBanner" hidden>
+    <span>카카오톡 안에서 열려 있습니다. 파일 첨부가 잘 안 되면 다른 브라우저로 열어 주세요.</span>
+    <button type="button" class="btn sm" id="openExternal">다른 브라우저로 열기</button>
+  </div>
+  <div class="notice-bar" id="draftBanner" hidden>
+    <span>이전에 입력하던 내용을 불러왔습니다. 첨부파일은 다시 선택해 주세요.</span>
+    <button type="button" class="btn sm" id="draftClear">새로 작성</button>
+  </div>
+
+  <form id="form" novalidate>
+    <input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+    <section class="card">
+      <h2><span class="num">1</span>기본정보</h2>
+      <div class="row">
+        <div class="field" data-f="name">
+          <label class="lbl" for="name">성명<span class="req">*</span></label>
+          <input type="text" id="name" autocomplete="name" maxlength="20">
+          <div class="err">성명을 입력해 주세요.</div>
+        </div>
+        <div class="field" data-f="gender">
+          <span class="lbl">성별<span class="req">*</span></span>
+          <div class="seg" role="radiogroup">
+            <input type="radio" name="gender" id="gM" value="남"><label for="gM">남</label>
+            <input type="radio" name="gender" id="gF" value="여"><label for="gF">여</label>
+          </div>
+          <div class="err">성별을 선택해 주세요.</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field" data-f="birth">
+          <label class="lbl" for="birth">생년월일<span class="req">*</span></label>
+          <input type="text" id="birth" inputmode="numeric" placeholder="예: 19800512" maxlength="10">
+          <div class="err">생년월일 8자리를 정확히 입력해 주세요.</div>
+        </div>
+        <div class="field" data-f="phone">
+          <label class="lbl" for="phone">휴대전화<span class="req">*</span></label>
+          <input type="tel" id="phone" inputmode="numeric" placeholder="010-0000-0000" autocomplete="tel" maxlength="13">
+          <div class="hint notice">합격 여부가 이 번호로 통지되니 정확히 입력해 주세요.</div>
+          <div class="err">휴대전화 번호를 정확히 입력해 주세요.</div>
+        </div>
+      </div>
+      <div class="field" data-f="email">
+        <label class="lbl" for="email">이메일<span class="req">*</span></label>
+        <input type="email" id="email" autocomplete="email" placeholder="example@naver.com">
+        <div class="err">이메일 주소를 정확히 입력해 주세요.</div>
+      </div>
+      <div class="field" data-f="address">
+        <label class="lbl" for="addr1">주소<span class="req">*</span></label>
+        <div class="addr-search">
+          <input type="text" id="addr1" readonly placeholder="주소 검색을 눌러 주세요">
+          <button type="button" class="btn" id="addrBtn">주소 검색</button>
+        </div>
+        <input type="hidden" id="zip">
+        <input type="text" id="addr2" placeholder="상세주소 (동·호수 등)" maxlength="100">
+        <div class="hint">도로명, 동 이름, 아파트·건물 이름으로 검색할 수 있습니다.</div>
+        <div class="err">주소를 검색하여 입력해 주세요.</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span class="num">2</span>근무희망 교육지원청</h2>
+      <div class="field" data-f="ranks">
+        <div class="hint" style="margin:0 0 12px">5개 교육지원청 모두 희망하는 순서대로 1순위부터 5순위까지 선택해 주세요.</div>
+        <div class="rank-list" id="rankList"></div>
+        <div class="rank-note">
+          <div class="hint">※ 한 교육지원청은 한 번만 고를 수 있어, 이미 다른 순위에 고른 곳은 흐리게 표시되고 선택되지 않습니다. 순위를 바꾸려면 오른쪽 버튼을 눌러 처음부터 다시 고르세요.</div>
+          <button type="button" class="btn sm" id="rankReset">다시 선택</button>
+        </div>
+        <div class="err">1순위부터 5순위까지 모두 선택해 주세요.</div>
+      </div>
+      <label class="check-row" for="gunwi">
+        <input type="checkbox" id="gunwi">
+        <span>군위겸임</span>
+      </label>
+      <div class="hint">배정된 교육지원청 근무와 함께 군위교육지원청 겸임 근무를 희망하시면 체크해 주세요.</div>
+    </section>
+
+    <section class="card">
+      <h2><span class="num">3</span>신청서류 첨부</h2>
+      <div class="field" data-f="files">
+        <div class="file-actions" id="fileActions">
+          <div class="dropzone" id="dropzone" tabindex="0" role="button">
+            <div><strong>파일 선택</strong><span class="desktop-only"> 또는 여기로 끌어다 놓기</span></div>
+            <div class="hint" id="fileRule"></div>
+          </div>
+          <button type="button" class="btn" id="cameraBtn" hidden>📷<br>촬영</button>
+        </div>
+        <input type="file" id="fileInput" multiple hidden>
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" hidden>
+        <ul class="files" id="fileList"></ul>
+        <div class="err">신청서류를 1개 이상 첨부해 주세요.</div>
+      </div>
+    </section>
+
+    <div class="submit-area">
+      <button type="submit" class="btn primary" id="submitBtn">신청서 제출</button>
+    </div>
+  </form>
+
+  <section class="card" id="progressCard" hidden>
+    <div class="progress-box">
+      <p id="progressText">제출 중입니다…</p>
+      <div class="pct" id="progressPct">0%</div>
+      <div class="bar"><div id="progressBar"></div></div>
+      <div class="hint" id="progressHint">창을 닫거나 새로고침하지 마세요.</div>
+      <ul class="files" id="upList"></ul>
+      <div class="progress-actions" id="retryBox" hidden>
+        <button type="button" class="btn primary" id="retryBtn">이어서 올리기</button>
+        <button type="button" class="btn" id="backBtn">입력 화면으로 돌아가기</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card done" id="doneCard" hidden>
+    <div class="check">✓</div>
+    <h2>신청이 접수되었습니다</h2>
+    <p>접수 여부는 위쪽 <b>접수 확인</b>에서 언제든 다시 확인할 수 있습니다.</p>
+    <dl class="summary" id="summary"></dl>
+  </section>
+
+  <section class="card" id="lookupCard" hidden>
+    <h2>접수 확인</h2>
+    <form id="lookupForm" novalidate>
+      <div class="field">
+        <label class="lbl" for="lkName">성명</label>
+        <input type="text" id="lkName" maxlength="20" autocomplete="name">
+      </div>
+      <div class="row">
+        <div class="field">
+          <label class="lbl" for="lkBirth">생년월일</label>
+          <input type="text" id="lkBirth" inputmode="numeric" placeholder="예: 19800512" maxlength="10">
+        </div>
+        <div class="field">
+          <label class="lbl" for="lkPhone">휴대전화</label>
+          <input type="tel" id="lkPhone" inputmode="numeric" placeholder="010-0000-0000" maxlength="13">
+        </div>
+      </div>
+      <div class="submit-area"><button type="submit" class="btn primary">확인하기</button></div>
+    </form>
+    <div class="lookup-result" id="lookupResult" hidden></div>
+    <div class="submit-area"><button type="button" class="btn" id="lookupBack" style="width:100%">신청 화면으로</button></div>
+  </section>
+</div>
+
+<div class="modal" id="addrModal" aria-hidden="true">
+  <div class="modal-box">
+    <div class="modal-head">주소 검색 <button type="button" id="addrClose" aria-label="닫기">×</button></div>
+    <div id="postcodeWrap"></div>
+  </div>
+</div>
+
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="module">
+/* ===== 설정 ===== */
+// 파이어베이스 콘솔 > 프로젝트 설정 > 내 앱 에서 복사한 값을 넣습니다. null 이면 시제품(데모) 모드입니다.
+const FIREBASE_CONFIG = {
+  apiKey: 'AIzaSyDZOK0_tH1PBDLX-WAHPSs-enNK5brtDns',
+  authDomain: 'coaching-2027-88f25.firebaseapp.com',
+  projectId: 'coaching-2027-88f25',
+  storageBucket: 'coaching-2027-88f25.firebasestorage.app',
+  messagingSenderId: '650052442791',
+  appId: '1:650052442791:web:fa845117105fbdc6f41982',
+};
+const FB_VER = '10.12.2';
+const OFFICES = ['동부', '서부', '남부', '달성', '군위'];
+const OFFICE_AREAS = {
+  동부: '동구, 수성구, 중구',
+  서부: '북구, 서구',
+  남부: '남구, 달서구',
+  달성: '달성군',
+  군위: '군위군',
+};
+const ALLOWED_EXT = ['pdf', 'jpg', 'jpeg', 'png', 'hwp', 'hwpx', 'doc', 'docx'];
+const MAX_FILE_MB = 40;   // storage.rules 와 같은 값이어야 합니다.
+const MAX_FILES = 10;
+const MAX_TOTAL_MB = 100;
+const DRAFT_KEY = 'coaching2027-draft';
+
+const $ = (id) => document.getElementById(id);
+const DEMO = !FIREBASE_CONFIG;
+if (DEMO) $('demoBanner').hidden = false;
+$('fileRule').textContent =
+  `PDF, 이미지(JPG·PNG), 한글, 워드 파일 · 파일당 ${MAX_FILE_MB}MB, 최대 ${MAX_FILES}개(합계 ${MAX_TOTAL_MB}MB)`;
+
+/* ===== 파이어베이스 (페이지가 뜬 뒤 미리 불러 둠) ===== */
+let fb = null;
+const fbReady = DEMO ? Promise.resolve(null) : (async () => {
+  const base = `https://www.gstatic.com/firebasejs/${FB_VER}`;
+  const [appM, fsM, stM] = await Promise.all([
+    import(`${base}/firebase-app.js`),
+    import(`${base}/firebase-firestore.js`),
+    import(`${base}/firebase-storage.js`),
+  ]);
+  const app = appM.initializeApp(FIREBASE_CONFIG);
+  fb = { ...fsM, ...stM, db: fsM.getFirestore(app), storage: stM.getStorage(app) };
+  return fb;
+})();
+
+/* ===== 카카오톡 인앱 브라우저 안내 ===== */
+if (/KAKAOTALK/i.test(navigator.userAgent)) {
+  $('kakaoBanner').hidden = false;
+  $('openExternal').onclick = () => {
+    location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
+  };
+}
+
+/* ===== 입력 서식 ===== */
+function fmtPhone(v) {
+  const d = v.replace(/\D/g, '').slice(0, 11);
+  return d.length < 4 ? d
+    : d.length < 8 ? `${d.slice(0, 3)}-${d.slice(3)}`
+    : d.length < 11 ? `${d.slice(0, 3)}-${d.slice(3, 6)}-${d.slice(6)}`
+    : `${d.slice(0, 3)}-${d.slice(3, 7)}-${d.slice(7)}`;
+}
+function fmtBirth(v) {
+  const d = v.replace(/\D/g, '').slice(0, 8);
+  return d.length <= 4 ? d
+    : d.length <= 6 ? `${d.slice(0, 4)}-${d.slice(4)}`
+    : `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6)}`;
+}
+['phone', 'lkPhone'].forEach((id) => $(id).addEventListener('input', (e) => { e.target.value = fmtPhone(e.target.value); }));
+['birth', 'lkBirth'].forEach((id) => $(id).addEventListener('input', (e) => { e.target.value = fmtBirth(e.target.value); }));
+
+/* ===== 주소 검색 (카카오) ===== */
+const modal = $('addrModal');
+function openAddr() {
+  modal.classList.add('open');
+  $('postcodeWrap').innerHTML = '';
+  new daum.Postcode({
+    width: '100%', height: '100%',
+    oncomplete(data) {
+      let addr = data.roadAddress || data.jibunAddress;
+      const extra = [];
+      if (data.userSelectedType === 'R' || data.roadAddress) {
+        if (data.bname && /[동로가]$/.test(data.bname)) extra.push(data.bname);
+        if (data.buildingName && data.apartment === 'Y') extra.push(data.buildingName);
+        if (extra.length) addr += ` (${extra.join(', ')})`;
+      }
+      $('zip').value = data.zonecode;
+      $('addr1').value = addr;
+      closeAddr();
+      $('addr2').focus();
+      clearErr('address');
+      saveDraft();
+    }
+  }).embed($('postcodeWrap'));
+}
+function closeAddr() { modal.classList.remove('open'); }
+$('addrBtn').addEventListener('click', openAddr);
+$('addr1').addEventListener('click', openAddr);
+$('addrClose').addEventListener('click', closeAddr);
+modal.addEventListener('click', (e) => { if (e.target === modal) closeAddr(); });
+
+/* ===== 희망순위 ===== */
+const rankList = $('rankList');
+const officeLabel = (o) => `${o}교육지원청 (${OFFICE_AREAS[o]})`;
+const ranks = OFFICES.map(() => '');
+let openRank = -1;
+function renderRanks() {
+  rankList.innerHTML = ranks.map((v, i) => `
+    <div class="rank-row"><span>${i + 1}순위</span><div class="rsel">
+      <button type="button" class="rsel-btn${v ? '' : ' empty'}" data-i="${i}" aria-haspopup="listbox" aria-expanded="${openRank === i}">${v ? officeLabel(v) : '선택'}</button>
+      ${openRank === i ? `<ul class="rsel-list" role="listbox">${OFFICES.map((o) => {
+        const at = ranks.indexOf(o);
+        const used = at >= 0 && at !== i;
+        return `<li><button type="button" data-o="${o}" class="${o === v ? 'cur' : ''}"${used ? ' disabled' : ''}>${officeLabel(o)}${used ? `<em>${at + 1}순위</em>` : ''}</button></li>`;
+      }).join('')}</ul>` : ''}
+    </div></div>`).join('');
+}
+rankList.addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (!btn || btn.disabled) return;
+  if (btn.dataset.i !== undefined) {
+    const i = +btn.dataset.i;
+    openRank = openRank === i ? -1 : i;
+  } else {
+    ranks[openRank] = btn.dataset.o;
+    openRank = -1;
+    // 4개를 고르면 남은 1개는 자동으로 채움
+    if (ranks.filter((r) => !r).length === 1) ranks[ranks.indexOf('')] = OFFICES.find((o) => !ranks.includes(o));
+    clearErr('ranks');
+    saveDraft();
+  }
+  renderRanks();
+});
+document.addEventListener('click', (e) => {
+  if (openRank >= 0 && !e.target.closest('.rsel')) { openRank = -1; renderRanks(); }
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && openRank >= 0) { openRank = -1; renderRanks(); }
+});
+$('rankReset').addEventListener('click', () => { ranks.fill(''); openRank = -1; renderRanks(); saveDraft(); });
+renderRanks();
+
+/* ===== 첨부파일 ===== */
+let files = [];
+const fileInput = $('fileInput');
+const dz = $('dropzone');
+const fmtSize = (b) => b < 1024 * 1024 ? `${Math.max(1, Math.round(b / 1024))}KB` : `${(b / 1048576).toFixed(1)}MB`;
+const extOf = (n) => n.split('.').pop().toLowerCase();
+function addFiles(list) {
+  const problems = [];
+  for (const f of list) {
+    if (!ALLOWED_EXT.includes(extOf(f.name))) { problems.push(`${f.name}: 첨부할 수 없는 형식입니다.`); continue; }
+    if (f.size > MAX_FILE_MB * 1048576) { problems.push(`${f.name}: ${MAX_FILE_MB}MB를 넘습니다. 파일을 나누어 올려 주세요.`); continue; }
+    if (f.size === 0) { problems.push(`${f.name}: 빈 파일입니다.`); continue; }
+    if (files.some((x) => x.name === f.name && x.size === f.size && x.lastModified === f.lastModified)) continue;
+    if (files.length >= MAX_FILES) { problems.push(`파일은 최대 ${MAX_FILES}개까지 첨부할 수 있습니다.`); break; }
+    const total = files.reduce((a, x) => a + x.size, 0) + f.size;
+    if (total > MAX_TOTAL_MB * 1048576) { problems.push(`전체 용량이 ${MAX_TOTAL_MB}MB를 넘습니다.`); break; }
+    files.push(f);
+  }
+  renderFiles();
+  if (problems.length) alert(problems.join('\n'));
+  else if (files.length) clearErr('files');
+}
+function renderFiles() {
+  $('fileList').innerHTML = '';
+  files.forEach((f, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="fname"></span><span class="fsize">${fmtSize(f.size)}</span><button type="button" aria-label="삭제">×</button>`;
+    li.querySelector('.fname').textContent = f.name;
+    li.querySelector('button').onclick = () => { files.splice(i, 1); renderFiles(); };
+    $('fileList').appendChild(li);
+  });
+}
+dz.addEventListener('click', () => fileInput.click());
+dz.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); } });
+fileInput.addEventListener('change', () => { addFiles(fileInput.files); fileInput.value = ''; });
+['dragenter', 'dragover'].forEach((ev) => dz.addEventListener(ev, (e) => { e.preventDefault(); dz.classList.add('drag'); }));
+['dragleave', 'drop'].forEach((ev) => dz.addEventListener(ev, (e) => { e.preventDefault(); dz.classList.remove('drag'); }));
+dz.addEventListener('drop', (e) => addFiles(e.dataTransfer.files));
+
+// 휴대폰에서는 카메라 촬영 버튼을 함께 보여 줌
+if (matchMedia('(pointer: coarse)').matches) {
+  $('cameraBtn').hidden = false;
+  $('fileActions').classList.add('has-camera');
+  document.querySelector('.desktop-only').hidden = true;
+}
+$('cameraBtn').addEventListener('click', () => $('cameraInput').click());
+$('cameraInput').addEventListener('change', (e) => {
+  const f = e.target.files[0];
+  e.target.value = '';
+  if (!f) return;
+  const ext = extOf(f.name) === 'png' ? 'png' : 'jpg';
+  const n = files.filter((x) => x.name.startsWith('촬영_')).length + 1;
+  addFiles([new File([f], `촬영_${n}.${ext}`, { type: f.type || 'image/jpeg', lastModified: f.lastModified })]);
+});
+
+/* ===== 입력 내용 자동 보관 ===== */
+const DRAFT_FIELDS = ['name', 'birth', 'phone', 'email', 'zip', 'addr1', 'addr2'];
+function saveDraft() {
+  try {
+    const d = { ranks, gunwi: $('gunwi').checked, gender: (document.querySelector('[name=gender]:checked') || {}).value || '' };
+    DRAFT_FIELDS.forEach((k) => { d[k] = $(k).value; });
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+  } catch (e) { /* 저장 불가 환경은 무시 */ }
+}
+function loadDraft() {
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); } catch (e) { return; }
+  if (!d || !(d.name || d.phone || d.email)) return;
+  DRAFT_FIELDS.forEach((k) => { if (d[k]) $(k).value = d[k]; });
+  if (d.gender) (document.querySelector(`[name=gender][value="${d.gender}"]`) || {}).checked = true;
+  $('gunwi').checked = !!d.gunwi;
+  if (Array.isArray(d.ranks) && d.ranks.length === OFFICES.length) d.ranks.forEach((r, i) => { ranks[i] = OFFICES.includes(r) ? r : ''; });
+  renderRanks();
+  $('draftBanner').hidden = false;
+}
+function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) { /* 무시 */ } }
+$('form').addEventListener('input', saveDraft);
+$('form').addEventListener('change', saveDraft);
+$('draftClear').addEventListener('click', () => {
+  if (!confirm('입력한 내용을 모두 지우고 새로 작성할까요?')) return;
+  clearDraft();
+  location.reload();
+});
+loadDraft();
+
+/* ===== 검증 ===== */
+function setErr(key, on) { document.querySelector(`[data-f="${key}"]`).classList.toggle('invalid', on); return !on; }
+function clearErr(key) { setErr(key, false); }
+['name', 'birth', 'phone', 'email'].forEach((k) => $(k).addEventListener('input', () => clearErr(k)));
+document.querySelectorAll('[name=gender]').forEach((r) => r.addEventListener('change', () => clearErr('gender')));
+
+function validBirth(v) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+  if (!m) return false;
+  const [y, mo, d] = [+m[1], +m[2], +m[3]];
+  const dt = new Date(y, mo - 1, d);
+  return y >= 1930 && dt <= new Date() && dt.getFullYear() === y && dt.getMonth() === mo - 1 && dt.getDate() === d;
+}
+const validPhone = (v) => /^01[016789]-\d{3,4}-\d{4}$/.test(v);
+function collect() {
+  return {
+    name: $('name').value.trim(),
+    gender: (document.querySelector('[name=gender]:checked') || {}).value || '',
+    birth: $('birth').value.trim(),
+    phone: $('phone').value.trim(),
+    email: $('email').value.trim(),
+    zip: $('zip').value,
+    addr1: $('addr1').value,
+    addr2: $('addr2').value.trim(),
+    ranks: [...ranks],
+    gunwi: $('gunwi').checked,
+  };
+}
+function validate(d) {
+  const checks = [
+    setErr('name', d.name.length < 2),
+    setErr('gender', !d.gender),
+    setErr('birth', !validBirth(d.birth)),
+    setErr('phone', !validPhone(d.phone)),
+    setErr('email', !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)),
+    setErr('address', !d.addr1),
+    setErr('ranks', new Set(d.ranks.filter(Boolean)).size !== OFFICES.length),
+    setErr('files', files.length === 0),
+  ];
+  const ok = checks.every(Boolean);
+  if (!ok) document.querySelector('.invalid').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  return ok;
+}
+
+/* ===== 접수 확인용 키 (성명+생년월일+휴대전화 → SHA-256) ===== */
+async function lookupKey(name, birth, phone) {
+  const raw = `${name.replace(/\s/g, '')}|${birth}|${phone.replace(/\D/g, '')}`;
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(raw));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+/* ===== 제출 ===== */
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const safeName = (n) => n.replace(/[\\/#?\[\]*\x00-\x1f]/g, '_').slice(-100);
+let job = null; // 진행 중인 제출 (이어서 올리기에 사용)
+
+function show(section) {
+  ['form', 'progressCard', 'doneCard', 'lookupCard'].forEach((id) => { $(id).hidden = id !== section; });
+  window.scrollTo({ top: 0 });
+}
+function renderUpList() {
+  $('upList').innerHTML = job.files.map((f, i) => `
+    <li class="${job.done[i] ? 'ok' : ''}"><div class="fmain"><div class="fname"></div><div class="fbar"><div style="width:${job.done[i] ? 100 : Math.round((job.sent[i] / f.size) * 100)}%"></div></div></div>
+    <span class="fstate">${job.done[i] ? '완료' : job.sent[i] ? Math.round((job.sent[i] / f.size) * 100) + '%' : '대기'}</span></li>`).join('');
+  [...$('upList').querySelectorAll('.fname')].forEach((el, i) => { el.textContent = job.files[i].name; });
+}
+function updateProgress(text) {
+  const total = job.files.reduce((a, f) => a + f.size, 0);
+  const sent = job.files.reduce((a, f, i) => a + (job.done[i] ? f.size : job.sent[i]), 0);
+  const pct = Math.min(99, Math.floor((sent / total) * 95));
+  if (text) $('progressText').textContent = text;
+  $('progressPct').textContent = pct + '%';
+  $('progressBar').style.width = pct + '%';
+  renderUpList();
+}
+
+async function uploadOne(i) {
+  const f = job.files[i];
+  if (DEMO) {
+    for (let p = 1; p <= 10; p++) { await wait(120); job.sent[i] = f.size * p / 10; updateProgress(); }
+    return { name: f.name, path: 'demo', size: f.size };
+  }
+  // 다시 시도할 때는 경로를 바꿔서 (덮어쓰기 금지 규칙과 충돌하지 않게) 올림
+  job.tries[i] += 1;
+  const path = `applications/${job.appId}/${i + 1}_${job.tries[i] > 1 ? `r${job.tries[i]}_` : ''}${safeName(f.name)}`;
+  const task = fb.uploadBytesResumable(fb.ref(fb.storage, path), f, { contentType: f.type || 'application/octet-stream' });
+  job.task = task;
+  await new Promise((resolve, reject) => {
+    task.on('state_changed', (snap) => { job.sent[i] = snap.bytesTransferred; updateProgress(); }, reject, resolve);
+  });
+  return { name: f.name, path, size: f.size };
+}
+
+async function runJob() {
+  $('retryBox').hidden = true;
+  $('progressHint').textContent = '창을 닫거나 새로고침하지 마세요.';
+  window.onbeforeunload = () => true;
+  try {
+    await fbReady;
+    for (let i = 0; i < job.files.length; i++) {
+      if (job.done[i]) continue;
+      updateProgress(`첨부파일 올리는 중 (${i + 1}/${job.files.length})`);
+      job.done[i] = await uploadOne(i);
+      updateProgress();
+    }
+    $('progressText').textContent = '신청서 접수 중…';
+    if (DEMO) await wait(500); else await commit();
+    $('progressPct').textContent = '100%';
+    $('progressBar').style.width = '100%';
+    finish();
+  } catch (err) {
+    console.error(err);
+    window.onbeforeunload = null;
+    const offline = !navigator.onLine || /network|retry-limit/i.test(err.code || err.message || '');
+    $('progressText').textContent = offline ? '인터넷 연결이 끊겼습니다' : '제출 중 문제가 생겼습니다';
+    $('progressHint').textContent = offline
+      ? '연결을 확인한 뒤 [이어서 올리기]를 누르세요. 이미 올라간 파일은 다시 올리지 않습니다.'
+      : '잠시 후 [이어서 올리기]를 눌러 주세요. 계속 안 되면 담당자에게 문의해 주세요. (' + (err.code || err.message) + ')';
+    $('retryBox').hidden = false;
+  }
+}
+
+async function commit() {
+  const { db, doc, runTransaction, serverTimestamp } = fb;
+  const counterRef = doc(db, 'meta', 'counter');
+  const appRef = doc(db, 'applications', job.appId);
+  const lookupRef = doc(db, 'lookup', job.key);
+  const d = job.data;
+  return runTransaction(db, async (t) => {
+    const c = await t.get(counterRef);
+    const seq = (c.exists() ? c.data().seq : 0) + 1;
+    t.set(counterRef, { seq, last: job.appId });
+    t.set(appRef, {
+      seq, submittedAt: serverTimestamp(),
+      name: d.name, gender: d.gender, birth: d.birth, phone: d.phone, email: d.email,
+      zip: d.zip, addr1: d.addr1, addr2: d.addr2, ranks: d.ranks, gunwi: d.gunwi,
+      files: job.done,
+    });
+    t.set(lookupRef, { fileCount: job.done.length, submittedAt: serverTimestamp(), appId: job.appId });
+  });
+}
+
+$('form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if ($('form').website.value) return; // 자동입력 방지
+  const data = collect();
+  if (!validate(data)) return;
+  if (!confirm(`${data.name}님의 신청서를 제출할까요?\n제출 후에는 수정할 수 없습니다.`)) return;
+  let appId = 'demo';
+  if (!DEMO) { await fbReady; appId = fb.doc(fb.collection(fb.db, 'applications')).id; }
+  job = {
+    appId, data, files: [...files],
+    key: await lookupKey(data.name, data.birth, data.phone),
+    sent: files.map(() => 0), done: files.map(() => null), tries: files.map(() => 0),
+  };
+  show('progressCard');
+  runJob();
+});
+$('retryBtn').addEventListener('click', runJob);
+$('backBtn').addEventListener('click', () => { job = null; show('form'); });
+
+function finish() {
+  window.onbeforeunload = null;
+  clearDraft();
+  $('draftBanner').hidden = true;
+  show('doneCard');
+  const d = job.data;
+  const rows = [
+    ['성명', d.name], ['연락처', d.phone], ['이메일', d.email],
+    ['희망순위', d.ranks.join(' > ')], ['군위겸임', d.gunwi ? '희망' : '미희망'], ['첨부서류', `${job.files.length}개`],
+  ];
+  $('summary').innerHTML = rows.map(([k]) => `<div><dt>${k}</dt><dd></dd></div>`).join('');
+  [...$('summary').querySelectorAll('dd')].forEach((dd, i) => { dd.textContent = rows[i][1]; });
+}
+
+/* ===== 접수 확인 ===== */
+let lastSection = 'form';
+$('toLookup').addEventListener('click', () => {
+  lastSection = ['form', 'doneCard'].find((id) => !$(id).hidden) || 'form';
+  $('lookupResult').hidden = true;
+  show('lookupCard');
+});
+$('lookupBack').addEventListener('click', () => show(lastSection));
+$('lookupForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = $('lkName').value.trim(), birth = $('lkBirth').value.trim(), phone = $('lkPhone').value.trim();
+  const box = $('lookupResult');
+  box.hidden = false;
+  box.className = 'lookup-result';
+  if (name.length < 2 || !validBirth(birth) || !validPhone(phone)) { box.textContent = '성명, 생년월일, 휴대전화를 정확히 입력해 주세요.'; return; }
+  box.textContent = '확인 중…';
+  try {
+    let r = null;
+    if (DEMO) { await wait(400); r = { fileCount: 2, submittedAt: new Date() }; }
+    else {
+      await fbReady;
+      const snap = await fb.getDoc(fb.doc(fb.db, 'lookup', await lookupKey(name, birth, phone)));
+      if (snap.exists()) { r = snap.data(); r.submittedAt = r.submittedAt.toDate(); }
+    }
+    if (!r) { box.textContent = '입력하신 정보로 접수된 신청서가 없습니다. 입력 내용을 다시 확인해 주세요.'; return; }
+    box.classList.add('ok');
+    box.innerHTML = `<b>접수 완료</b><br>제출일시 <span></span><br>첨부서류 <span></span>개`;
+    const spans = box.querySelectorAll('span');
+    spans[0].textContent = r.submittedAt.toLocaleString('ko-KR');
+    spans[1].textContent = r.fileCount;
+  } catch (err) {
+    console.error(err);
+    box.textContent = '확인 중 문제가 생겼습니다. 잠시 후 다시 시도해 주세요.';
+  }
+});
+</script>
+</body>
+</html>
