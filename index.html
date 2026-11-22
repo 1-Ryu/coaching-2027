@@ -317,6 +317,7 @@
     <div class="check">✓</div>
     <h2>신청이 접수되었습니다</h2>
     <p>접수 여부는 위쪽 <b>접수 확인</b>에서 언제든 다시 확인할 수 있습니다.</p>
+    <p>내용을 고치려면 마감 전까지 <b>다시 제출</b>해 주세요. 마지막으로 제출한 내용으로 접수됩니다.</p>
     <dl class="summary" id="summary"></dl>
   </section>
 
@@ -779,7 +780,7 @@ $('form').addEventListener('submit', async (e) => {
   const data = collect();
   if (!validate(data)) return;
   if (await isClosed()) { closeForm(); return; }
-  if (!confirm(`${data.name}님의 신청서를 제출할까요?\n제출 후에는 수정할 수 없습니다.`)) return;
+  if (!confirm(`${data.name}님의 신청서를 제출할까요?\n\n제출 후 내용을 고치려면 마감 전까지 다시 제출하시면 됩니다.\n마지막으로 제출한 내용으로 접수됩니다.`)) return;
   if (await isClosed()) { closeForm(); return; }
   let appId = 'demo';
   if (!DEMO) { await fbReady; appId = fb.doc(fb.collection(fb.db, 'applications')).id; }
