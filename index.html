@@ -28,7 +28,7 @@
   .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
   header { margin-bottom: 20px; }
   header .org { color: var(--primary); font-weight: 700; font-size: 19px; }
-  header h1 { margin: 4px 0 10px; font-size: 30px; letter-spacing: -0.02em; }
+  header h1 { cursor: pointer; display: inline-block; margin: 4px 0 10px; font-size: 30px; letter-spacing: -0.02em; }
   header p { margin: 0; color: #475467; font-size: 17px; }
   .demo-banner {
     background: #fff4d6; border: 1px solid #f0d58a; color: #6b5200;
@@ -193,7 +193,7 @@
   <div class="topnav"><button type="button" class="linkbtn" id="toLookup">이미 신청하셨나요? 접수 확인</button></div>
   <header>
     <div class="org">대구광역시교육청</div>
-    <h1>2027 두뇌기반 학습코칭단 신청</h1>
+    <h1 id="title" role="link" tabindex="0">2027 두뇌기반 학습코칭단 신청</h1>
     <p id="intro">기본정보를 입력하고 신청서류를 첨부한 뒤 제출해 주세요. 별표(<span class="req">*</span>) 항목은 모두 필수입니다.</p>
     <p class="deadline">신청 마감: <b id="deadlineText"></b><span class="countdown" id="countdown" hidden></span></p>
   </header>
@@ -816,6 +816,14 @@ $('toLookup').addEventListener('click', () => {
   show('lookupCard');
 });
 $('lookupBack').addEventListener('click', () => show(lastSection));
+// 제목을 누르면: 접수 확인 화면 → 원래 화면으로, 그 밖의 화면 → 새로고침 (제출 진행 중에는 무시)
+function onTitle() {
+  if (!$('lookupCard').hidden) { show(lastSection); return; }
+  if (!$('progressCard').hidden) return;
+  location.reload();
+}
+$('title').addEventListener('click', onTitle);
+$('title').addEventListener('keydown', (e) => { if (e.key === 'Enter') onTitle(); });
 $('lookupForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const name = $('lkName').value.trim(), birth = $('lkBirth').value.trim(), phone = $('lkPhone').value.trim();
