@@ -23,36 +23,36 @@
   body {
     margin: 0; background: var(--bg); color: var(--text);
     font-family: Pretendard, -apple-system, "Malgun Gothic", sans-serif;
-    font-size: 16px; line-height: 1.5; -webkit-text-size-adjust: 100%;
+    font-size: 18px; line-height: 1.55; -webkit-text-size-adjust: 100%;
   }
   .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
   header { margin-bottom: 20px; }
-  header .org { color: var(--primary); font-weight: 600; font-size: 14px; }
-  header h1 { margin: 4px 0 8px; font-size: 26px; letter-spacing: -0.02em; }
-  header p { margin: 0; color: var(--muted); font-size: 15px; }
+  header .org { color: var(--primary); font-weight: 700; font-size: 19px; }
+  header h1 { margin: 4px 0 10px; font-size: 30px; letter-spacing: -0.02em; }
+  header p { margin: 0; color: #475467; font-size: 17px; }
   .demo-banner {
     background: #fff4d6; border: 1px solid #f0d58a; color: #6b5200;
-    padding: 10px 14px; border-radius: 10px; font-size: 14px; margin-bottom: 16px;
+    padding: 10px 14px; border-radius: 10px; font-size: 16px; margin-bottom: 16px;
   }
   .card {
     background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
     padding: 22px 20px; margin-bottom: 16px;
   }
-  .card h2 { margin: 0 0 16px; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+  .card h2 { margin: 0 0 16px; font-size: 21px; display: flex; align-items: center; gap: 8px; }
   .card h2 .num {
-    display: inline-flex; width: 24px; height: 24px; border-radius: 50%;
-    background: var(--primary); color: #fff; font-size: 13px; align-items: center; justify-content: center;
+    display: inline-flex; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--primary); color: #fff; font-size: 15px; align-items: center; justify-content: center;
   }
   .field { margin-bottom: 16px; }
   .field:last-child { margin-bottom: 0; }
-  label.lbl { display: block; font-weight: 600; font-size: 15px; margin-bottom: 6px; }
+  label.lbl { display: block; font-weight: 600; font-size: 17px; margin-bottom: 6px; }
   .req { color: var(--danger); margin-left: 2px; }
-  .hint { color: var(--muted); font-size: 13px; margin-top: 4px; }
-  .err { color: var(--danger); font-size: 13px; margin-top: 4px; display: none; }
+  .hint { color: #5b6474; font-size: 15px; margin-top: 4px; }
+  .err { color: var(--danger); font-size: 15px; margin-top: 4px; display: none; }
   .field.invalid .err { display: block; }
   .field.invalid input, .field.invalid select, .field.invalid .dropzone { border-color: var(--danger); }
   input[type=text], input[type=tel], input[type=email], select {
-    width: 100%; height: 48px; padding: 0 14px; font: inherit; color: var(--text);
+    width: 100%; height: 52px; padding: 0 14px; font: inherit; color: var(--text);
     border: 1px solid var(--line); border-radius: 10px; background: #fff; outline: none;
   }
   input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-weak); }
@@ -75,11 +75,11 @@
   .btn.primary { background: var(--primary); color: #fff; }
   .btn:disabled { opacity: .55; cursor: not-allowed; }
   .rank-list { display: grid; gap: 8px; }
-  .rank-row { display: grid; grid-template-columns: 72px 1fr; align-items: center; gap: 10px; }
+  .rank-row { display: grid; grid-template-columns: 80px 1fr; align-items: center; gap: 10px; }
   .rank-row span { font-weight: 700; color: var(--primary); }
   .rsel { position: relative; }
   .rsel-btn {
-    width: 100%; height: 48px; padding: 0 40px 0 14px; text-align: left; font: inherit; color: var(--text);
+    width: 100%; height: 52px; padding: 0 40px 0 14px; text-align: left; font: inherit; color: var(--text);
     border: 1px solid var(--line); border-radius: 10px; background: #fff; cursor: pointer;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
@@ -97,14 +97,15 @@
   .rsel-list button:hover:not(:disabled) { background: var(--primary-weak); }
   .rsel-list button.cur { color: var(--primary); font-weight: 700; }
   .rsel-list button:disabled { color: #b4bac4; cursor: not-allowed; }
-  .rsel-list em { font-style: normal; font-size: 12px; padding: 2px 8px; border-radius: 99px; background: #eef0f3; color: #8a919c; white-space: nowrap; }
+  .rsel-list em { font-style: normal; font-size: 14px; padding: 2px 8px; border-radius: 99px; background: #eef0f3; color: #8a919c; white-space: nowrap; }
   .rank-note { margin-top: 10px; display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; }
   .rank-note .hint { margin: 0; }
-  .btn.sm { height: 34px; padding: 0 12px; font-size: 14px; font-weight: 500; }
+  .btn.sm { height: 40px; padding: 0 14px; font-size: 16px; font-weight: 500; }
   .check-row { display: flex; align-items: center; gap: 10px; margin-top: 16px; padding: 14px; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; font-weight: 600; }
   .check-row input { width: 20px; height: 20px; accent-color: var(--primary); margin: 0; flex-shrink: 0; }
   .check-row:has(input:checked) { border-color: var(--primary); background: var(--primary-weak); }
   .hint.notice { color: var(--primary); font-weight: 500; }
+  .hint.big { font-size: 16px; color: #475467; line-height: 1.6; }
   .dropzone {
     border: 2px dashed var(--line); border-radius: var(--radius); padding: 22px 16px; text-align: center;
     cursor: pointer; transition: background .15s, border-color .15s;
@@ -115,13 +116,13 @@
   .files { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 6px; }
   .files li {
     display: flex; align-items: center; gap: 10px; padding: 10px 12px;
-    border: 1px solid var(--line); border-radius: 10px; font-size: 14px;
+    border: 1px solid var(--line); border-radius: 10px; font-size: 16px;
   }
   .files .fname { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .files .fsize { color: var(--muted); font-size: 13px; }
+  .files .fsize { color: var(--muted); font-size: 15px; }
   .files button { border: 0; background: none; color: var(--muted); font-size: 20px; cursor: pointer; line-height: 1; padding: 0 4px; }
   .submit-area { margin-top: 8px; }
-  .submit-area .btn { width: 100%; height: 56px; font-size: 17px; }
+  .submit-area .btn { width: 100%; height: 60px; font-size: 20px; }
   .hp { position: absolute; left: -9999px; }
 
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; z-index: 50; align-items: center; justify-content: center; padding: 16px; }
@@ -139,18 +140,23 @@
 
   .done { text-align: center; padding: 36px 20px; }
   .done .check { width: 64px; height: 64px; border-radius: 50%; background: #e3f5ea; color: var(--ok); font-size: 34px; display: inline-flex; align-items: center; justify-content: center; }
-  .done h2 { display: block; margin: 16px 0 8px; font-size: 22px; }
+  .done h2 { display: block; margin: 16px 0 8px; font-size: 25px; }
   .done p { color: var(--muted); margin: 4px 0; }
-  .summary { text-align: left; margin: 20px auto 0; max-width: 420px; border-top: 1px solid var(--line); padding-top: 14px; font-size: 14px; }
+  .done .check.closed { background: #fdecec; color: #c0392b; font-weight: 800; }
+  .deadline { margin-top: 6px; }
+  .deadline b { color: var(--primary); }
+  .countdown { display: inline-block; margin-left: 8px; padding: 2px 10px; border-radius: 99px; background: var(--primary-weak); color: var(--primary); font-weight: 700; font-size: 16px; font-variant-numeric: tabular-nums; }
+  .countdown.soon { background: #fdecec; color: #c0392b; }
+  .summary { text-align: left; margin: 20px auto 0; max-width: 420px; border-top: 1px solid var(--line); padding-top: 14px; font-size: 16px; }
   .summary div { display: flex; gap: 12px; padding: 3px 0; }
   .summary dt { width: 92px; color: var(--muted); flex-shrink: 0; }
   .summary dd { margin: 0; }
 
   .topnav { display: flex; justify-content: flex-end; margin-bottom: 8px; }
-  .linkbtn { border: 0; background: none; color: var(--primary); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; padding: 6px 0; text-decoration: underline; text-underline-offset: 3px; }
+  .linkbtn { border: 0; background: none; color: var(--primary); font: inherit; font-size: 18px; font-weight: 700; cursor: pointer; padding: 6px 0; text-decoration: underline; text-underline-offset: 3px; }
   .notice-bar {
     display: flex; gap: 10px; align-items: center; justify-content: space-between;
-    padding: 12px 14px; border-radius: 10px; font-size: 14px; margin-bottom: 16px;
+    padding: 12px 14px; border-radius: 10px; font-size: 16px; margin-bottom: 16px;
     background: var(--primary-weak); border: 1px solid #c9daf5; color: #1d3f78;
   }
   .notice-bar.warn { background: #fff4d6; border-color: #f0d58a; color: #6b5200; }
@@ -158,7 +164,7 @@
   .file-actions { display: grid; grid-template-columns: 1fr; gap: 8px; }
   .file-actions.has-camera { grid-template-columns: 1fr auto; }
   .file-actions .btn { height: auto; min-height: 48px; }
-  .files li .fstate { font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .files li .fstate { font-size: 14px; color: var(--muted); white-space: nowrap; }
   .files li.ok .fstate { color: var(--ok); font-weight: 600; }
   .files li .fbar { height: 4px; border-radius: 99px; background: var(--line); overflow: hidden; margin-top: 6px; }
   .files li .fbar div { height: 100%; width: 0; background: var(--primary); transition: width .2s; }
@@ -169,10 +175,12 @@
   #upList { text-align: left; margin-top: 16px; }
   .lookup-result { margin-top: 16px; padding: 16px; border-radius: 10px; background: #f7f8fa; }
   .lookup-result.ok { background: #e3f5ea; }
-  .lookup-result b { font-size: 18px; }
+  .lookup-result b { font-size: 20px; }
 
   @media (max-width: 480px) {
-    header h1 { font-size: 22px; }
+    header h1 { font-size: 25px; }
+    .rank-row { grid-template-columns: 62px 1fr; }
+    .rank-note { flex-direction: column; align-items: stretch; }
     .card { padding: 18px 16px; }
     .row { grid-template-columns: 1fr; gap: 0; }
     .row .field { margin-bottom: 16px; }
@@ -186,7 +194,8 @@
   <header>
     <div class="org">대구광역시교육청</div>
     <h1>2027 두뇌기반 학습코칭단 신청</h1>
-    <p>기본정보를 입력하고 신청서류를 첨부한 뒤 제출해 주세요. 별표(<span class="req">*</span>) 항목은 모두 필수입니다.</p>
+    <p id="intro">기본정보를 입력하고 신청서류를 첨부한 뒤 제출해 주세요. 별표(<span class="req">*</span>) 항목은 모두 필수입니다.</p>
+    <p class="deadline">신청 마감: <b id="deadlineText"></b><span class="countdown" id="countdown" hidden></span></p>
   </header>
 
   <div class="notice-bar warn" id="demoBanner" hidden>시제품 모드입니다. 제출해도 실제로 저장되지 않습니다.</div>
@@ -253,19 +262,19 @@
     <section class="card">
       <h2><span class="num">2</span>근무희망 교육지원청</h2>
       <div class="field" data-f="ranks">
-        <div class="hint" style="margin:0 0 12px">5개 교육지원청 모두 희망하는 순서대로 1순위부터 5순위까지 선택해 주세요.</div>
+        <div class="hint big" style="margin:0 0 12px">5개 교육지원청 모두 희망하는 순서대로 1순위부터 5순위까지 선택해 주세요.</div>
         <div class="rank-list" id="rankList"></div>
         <div class="rank-note">
-          <div class="hint">※ 한 교육지원청은 한 번만 고를 수 있어, 이미 다른 순위에 고른 곳은 흐리게 표시되고 선택되지 않습니다. 순위를 바꾸려면 오른쪽 버튼을 눌러 처음부터 다시 고르세요.</div>
+          <div class="hint big">※ 한 교육지원청은 한 번만 고를 수 있어, 이미 다른 순위에 고른 곳은 흐리게 표시되고 선택되지 않습니다. 순위를 바꾸려면 [다시 선택] 버튼을 눌러 처음부터 다시 고르세요.</div>
           <button type="button" class="btn sm" id="rankReset">다시 선택</button>
         </div>
         <div class="err">1순위부터 5순위까지 모두 선택해 주세요.</div>
       </div>
       <label class="check-row" for="gunwi">
         <input type="checkbox" id="gunwi">
-        <span>군위겸임</span>
+        <span>군위겸임 희망</span>
       </label>
-      <div class="hint">배정된 교육지원청 근무와 함께 군위교육지원청 겸임 근무를 희망하시면 체크해 주세요.</div>
+      <div class="hint big">배정된 교육지원청 근무와 함께 군위교육지원청 겸임 근무를 희망하시면 체크해 주세요.</div>
     </section>
 
     <section class="card">
@@ -309,6 +318,13 @@
     <h2>신청이 접수되었습니다</h2>
     <p>접수 여부는 위쪽 <b>접수 확인</b>에서 언제든 다시 확인할 수 있습니다.</p>
     <dl class="summary" id="summary"></dl>
+  </section>
+
+  <section class="card done" id="closedCard" hidden>
+    <div class="check closed">!</div>
+    <h2>신청 접수가 마감되었습니다</h2>
+    <p>신청 기간: <span id="closedText"></span>까지</p>
+    <p>이미 신청하신 분은 위쪽 <b>접수 확인</b>에서 접수 여부를 확인할 수 있습니다.</p>
   </section>
 
   <section class="card" id="lookupCard" hidden>
@@ -366,6 +382,9 @@ const OFFICE_AREAS = {
 const MAX_FILE_MB = 100;  // storage.rules 와 같은 값이어야 합니다.
 const MAX_FILES = 10;
 const MAX_TOTAL_MB = 100;
+// 접수 마감 (한국시간). 바꿀 때는 firestore.rules 와 storage.rules 의 마감 시각도 함께 바꿉니다.
+const DEADLINE = new Date('2026-12-01T17:00:00+09:00');
+const DEADLINE_LABEL = '2026년 12월 1일(화) 17:00';
 const DRAFT_KEY = 'coaching2027-draft';
 
 const $ = (id) => document.getElementById(id);
@@ -623,8 +642,48 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const safeName = (n) => n.replace(/[\\/#?\[\]*\x00-\x1f]/g, '_').slice(-100);
 let job = null; // 진행 중인 제출 (이어서 올리기에 사용)
 
+/* ===== 접수 마감 ===== */
+// 신청자 기기의 시계가 틀려도 되도록 서버 시각(사이트 응답의 Date)을 기준으로 함
+let clockOffset = 0;
+async function syncClock() {
+  try {
+    const r = await fetch(location.href, { method: 'HEAD', cache: 'no-store' });
+    const t = Date.parse(r.headers.get('Date'));
+    if (t) clockOffset = t - Date.now();
+  } catch (e) { /* 실패하면 기기 시계 사용 */ }
+}
+async function isClosed() { await syncClock(); return Date.now() + clockOffset >= DEADLINE.getTime(); }
+function closeForm() {
+  $('draftBanner').hidden = true;
+  $('intro').hidden = true;
+  $('countdown').hidden = true;
+  show('closedCard');
+}
+// 마감까지 남은 시간 (1초마다 갱신, 24시간 안쪽이면 빨간색)
+function tickCountdown() {
+  const left = DEADLINE.getTime() - (Date.now() + clockOffset);
+  const el = $('countdown');
+  if (left <= 0) { el.hidden = true; return; }
+  const sec = Math.floor(left / 1000);
+  const d = Math.floor(sec / 86400), h = Math.floor(sec % 86400 / 3600), m = Math.floor(sec % 3600 / 60), ss = sec % 60;
+  const p2 = (n) => String(n).padStart(2, '0');
+  el.textContent = '남은 시간 ' + (d ? d + '일 ' : '') + p2(h) + ':' + p2(m) + ':' + p2(ss);
+  el.classList.toggle('soon', left < 86400000);
+  el.hidden = false;
+}
+tickCountdown();
+setInterval(tickCountdown, 1000);
+$('deadlineText').textContent = DEADLINE_LABEL;
+$('closedText').textContent = DEADLINE_LABEL;
+if (Date.now() >= DEADLINE.getTime()) closeForm();
+isClosed().then((c) => { if (c) closeForm(); });
+// 화면을 열어 둔 채 마감 시각이 지나면 입력 화면을 마감 안내로 바꿈 (제출 진행 중인 분은 그대로 둠)
+setInterval(() => {
+  if (!$('form').hidden && Date.now() + clockOffset >= DEADLINE.getTime()) closeForm();
+}, 30000);
+
 function show(section) {
-  ['form', 'progressCard', 'doneCard', 'lookupCard'].forEach((id) => { $(id).hidden = id !== section; });
+  ['form', 'progressCard', 'doneCard', 'closedCard', 'lookupCard'].forEach((id) => { $(id).hidden = id !== section; });
   window.scrollTo({ top: 0 });
 }
 function renderUpList() {
@@ -719,7 +778,9 @@ $('form').addEventListener('submit', async (e) => {
   if ($('form').website.value) return; // 자동입력 방지
   const data = collect();
   if (!validate(data)) return;
+  if (await isClosed()) { closeForm(); return; }
   if (!confirm(`${data.name}님의 신청서를 제출할까요?\n제출 후에는 수정할 수 없습니다.`)) return;
+  if (await isClosed()) { closeForm(); return; }
   let appId = 'demo';
   if (!DEMO) { await fbReady; appId = fb.doc(fb.collection(fb.db, 'applications')).id; }
   job = {
@@ -750,7 +811,7 @@ function finish() {
 /* ===== 접수 확인 ===== */
 let lastSection = 'form';
 $('toLookup').addEventListener('click', () => {
-  lastSection = ['form', 'doneCard'].find((id) => !$(id).hidden) || 'form';
+  lastSection = ['form', 'doneCard', 'closedCard'].find((id) => !$(id).hidden) || 'form';
   $('lookupResult').hidden = true;
   show('lookupCard');
 });
